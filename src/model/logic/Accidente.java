@@ -14,23 +14,35 @@ public class Accidente  {
 	private String severity;
 	
 	/**
-	 * Atributo startTime
+	 * Atributo startDate (fecha inicial)
 	 */
-	private String startTime;
+	private String startDate;
 	
 	/**
-	 * Atributo endTime
+	 * Atributo endDate (fecha final)
 	 */
-	private String endTime;
+	private String endDate;
+	
+	/**
+	 * Atributo startHour
+	 */
+	private String startHour;
+	
+	/**
+	 * Atributo endHour
+	 */
+	private String endHour;
 	
 	/**
 	 * Constructor
 	 */
-	public Accidente (String id, String severity, String startTime, String endTime) {
+	public Accidente (String id, String severity, String startDate, String endDate, String startHour, String endHour) {
 		this.id = id;
 		this.severity = severity;
-		this.startTime = startTime;
-		this.endTime = endTime;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.startHour = startHour;
+		this.endHour = endHour;
 	}
 	
 	/**
@@ -50,16 +62,33 @@ public class Accidente  {
 	/**
 	 * Retorna el atributo startTime
 	 */
-	public String getStartTime() {
-		return startTime;
+	public String getStartDate() {
+		return startDate;
 	}
 	
 	/**
 	 * Retorna el atributo endTime
 	 */
-	public String getEndTime() {
-		return endTime;
+	public String getEndDate() {
+		return endDate;
 	}
+	
+	/**
+	 * Retorna el atributo startHour
+	 */
+	public String getStartHour() {
+		return startHour;
+	}
+	
+	/**
+	 * Retorna el atributo endHour
+	 */
+	
+	public String getEndHour() {
+		return endHour;
+	}
+
+	
 
 	
 }

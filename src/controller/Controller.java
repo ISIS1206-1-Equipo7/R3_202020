@@ -1,23 +1,27 @@
 package controller;
 
-import java.util.Objects;
+
 import java.util.Scanner;
 
-import javafx.scene.shape.Line;
+
 import model.logic.Modelo;
 import view.View;
 
 public class Controller {
 
-	/* Instancia del Modelo*/
+	/* declaracion del Modelo*/
 	private Modelo modelo;
 
-	/* Instancia de la Vista*/
+	/* declaracion de la Vista*/
 	private View view;
+	
+	/**
+	 * boolean para verificar si los datos fueron previamente cargados
+	 */
+	private boolean cargados;
 
 	/**
-	 * Crear la vista y el modelo del proyecto
-	 * @param capacidad tamaNo inicial del arreglo
+	 * Crea la vista y el modelo del proyecto
 	 */
 	public Controller ()
 	{
@@ -26,8 +30,8 @@ public class Controller {
 	}
 
 	/** 
-	 * método run de la Clase Controller
-	 * inicia la aplicación
+	 * metodo run de la Clase Controller
+	 * inicia la aplicacion
 	 */
 	public void run() 
 	{
@@ -38,41 +42,92 @@ public class Controller {
 		{
 			view.printMenu();
 			
-			int option=1;
+			int option=0;
 			try {
 				 option = lector.nextInt();
 			}
 			catch(Exception e)
 			{
-				view.printMessage("Opcion invalida. Debe digitar un número. Vuelva a intentar");
+				view.printMessage("Opcion invalida. Debe digitar un numero. Vuelva a intentar");
 				lector.nextLine();
 				 option = lector.nextInt();
 			}
 			
 			switch(option)
 			{
-			// Importa los datos
-			case 1:
-				System.out.print("¿De que año desea la información de los accidentes?");
-				String anno = lector.next();
-				System.out.println("Importando datos del año " + anno + "...");
-				modelo.leerDatos(anno);
-				System.out.println("Datos importados correctamente.");
-				break;
-			// resuelve requerimiento 1
-			case 2:
-				System.out.println("Ingrese la fecha que desea consultar");
-				String st = lector.next();
-				
-				try {
-					modelo.conocerAccidentesFechaRBT(st);
-					modelo.conocerAccidentesFechaBST(st);
-				}
-				catch (Exception e){
-					
-					System.out.println("La fecha que desea consultar no existe en la base de datos. Vuelva a intentarlo. " + "\n");
-				}
 
+			// Importa los datos
+			case 0:
+				view.printMessage("¿De que anno desea la informacion de los accidentes?");
+				String anno = lector.next();
+				view.printMessage("Importando datos del anno " + anno + "...");
+				modelo.leerDatos(anno);
+				view.printMessage("Datos importados correctamente.");
+				cargados = true;
+				break;
+			// resuelve requerimiento 1:
+			case 1:
+				if(!cargados) {
+					view.printMessage("Debe cargar los datos primero");
+					break;
+				}
+				view.printMessage("Ingrese la fecha que desea consultar");
+				String st = lector.next();
+				modelo.conocerAccidentesFechaRBT(st);
+//				modelo.conocerAccidentesFechaBST(st);
+				break;
+				
+			// Resuelve el requerimiento 2:
+			case 2:
+				if(!cargados) {
+					view.printMessage("Debe cargar los datos primero");
+					break;
+				}
+				view.printMessage("Ingrese la fecha para la cual desea consultar los accidentes anteriores");
+				String fecha = lector.next();
+				
+				// verifica que el formato esta correcto
+				if(modelo.correctFormat(null, fecha)==false) {
+					break;
+				}
+				break;
+				
+			//Resuelve el requerimiento 3:
+			case 3:
+				if(!cargados) {
+					view.printMessage("Debe cargar los datos primero");
+					break;
+				}
+				view.printMessage("Ingrese la fecha del limite inferior");
+				String fechaInit = lector.next();
+				view.printMessage("Ingrese la fecha del limite superior");
+				String fechaEnd = lector.next();
+				
+				// verifica que el formato esta correcto
+				if(modelo.correctFormat(fechaInit, fechaEnd)==false) {
+					break;
+				}
+				modelo.conocerAccidentesRangoFechas(fechaInit, fechaEnd);
+				break;
+			
+			//Resuelve el requerimiento 4:
+			case 4:
+				if(!cargados) {
+					view.printMessage("Debe cargar los datos primero");
+					break;
+				}
+				view.printMessage("Ingrese la fecha del limite inferior");
+				String fechaInit4 = lector.next();
+				view.printMessage("Ingrese la fecha del limite superior");
+				String fechaEnd4 = lector.next();
+				break;
+				
+			//Resuelve el requerimiento 5:
+			case 5:
+				if(!cargados) {
+					view.printMessage("Debe cargar los datos primero");
+					break;
+				}
 				break;
 
 			default: 

@@ -236,7 +236,7 @@ public class RedBlackTree<K extends Comparable<K>,V> implements TablaSimbolosOrd
 	        if (cmpinit <= 0 && cmpend >= 0) {
 	        	if(nodo.values!=null) {
 		        	for(V val: nodo.values)
-		        	lista.add(val); // si la llave del nodo actual está dentro del rango, entonces la agrega
+		        	lista.add(val); // si el valor del nodo actual está dentro del rango, entonces la agrega
 	        	}
 	        }
 	        if (cmpend > 0) valuesInRange(nodo.right, lista, init, end); // si la key del nodo actual es menor a la key end entonces se mueve mas a la derecha.

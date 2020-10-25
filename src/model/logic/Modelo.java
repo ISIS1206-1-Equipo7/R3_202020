@@ -51,7 +51,7 @@ public class Modelo {
 	public Modelo()
 	{
 		datosRBT = new RedBlackTree<String, Accidente>();
-		datosBST = new BinarySearchTree<String, Accidente>();
+		// datosBST = new BinarySearchTree<String, Accidente>();
 	}
 
 
@@ -135,6 +135,79 @@ public class Modelo {
 		System.out.println("El tiempo de ejecucion fue de: " + tiempoT + " milisegundos" + "\n");
 
 	}
+	
+	/**
+	 * Conocer accidentes en un rango de fechas
+	 * Resuelve el requerimiento 3 del Reto 3.
+	 * @param fechaInit fecha inicial
+	 * @param fechaEnd fecha final.
+	 */
+	
+	public void conocerAccidentesRangoFechas(String fechaInit, String fechaEnd ) {
+		
+		LinkedList<Accidente> result = (LinkedList<Accidente>) datosRBT.valuesInRange(fechaInit, fechaEnd);
+		
+		System.out.println("Se encontraron " + result.size() + " en el rango solicitado.");
+
+		int gradoUno = 0;
+		int gradoDos = 0;
+		int gradoTres = 0;
+		int gradoCuatro = 0;
+
+		for (Accidente actual : result) {
+
+			if(actual.getSeverity().equals("1"))
+				gradoUno++;
+			else if(actual.getSeverity().equals("2"))
+				gradoDos++;
+			else if(actual.getSeverity().equals("3"))
+				gradoTres++;
+			else
+				gradoCuatro++;
+		}
+
+		
+		int max = 0;
+		int max2 = 0;
+		int indicador =0;
+		int indicador2 =0;
+		if(gradoUno>gradoDos) {
+			max = gradoUno;
+			indicador = 1;
+		}
+		else {
+			max = gradoDos;
+			indicador = 2;
+		}
+		if(gradoTres>gradoCuatro) {
+			max2 = gradoTres;
+			indicador2 = 3;
+		}
+		else {
+			max2 = gradoCuatro;
+			indicador2 = 4;
+		}
+		
+		if(max>max2) {
+			System.out.println("La categoria de accidentes mas reportada es: " + indicador + " con " + max + " accidentes.");
+
+		}
+		else
+			System.out.println("La categoria de accidentes mas reportada es " + indicador2 + " con " + max2 + " accidentes.");
+
+		
+
+		
+	}
+	
+	/**
+	 * Resuelve el requerimento 5: Conocer los accidentes por rango de horas.
+	 * @param horaInit
+	 * @param horaEnd
+	 */
+	public void accidentesPorRangoHoras(String horaInit, String horaEnd) {
+		
+	}
 
 	/**
 	 * Importa, lee y guarda los datos necesarios
@@ -167,15 +240,21 @@ public class Modelo {
 				String id = camposDatos[0];
 				// severity
 				String severity = camposDatos[3];
-				// startTime
-				String startTime = camposDatos[4].substring(0, 10);
+				// startDate
+				String startDate = camposDatos[4].substring(0, 10);
+				//startHour
+				String startHour = camposDatos[4].substring(11,16);
 				// endTime
-				String endTime = camposDatos[5].substring(0, 10);
+				String endDate = camposDatos[5].substring(0, 10);
+				// endHour
+				String endHour = camposDatos[5].substring(11, 16);
+								
+				
+				Accidente accidente = new Accidente(id, severity, startDate, endDate, startHour, endHour);
 
-				Accidente accidente = new Accidente(id, severity, startTime, endTime);
-
-				datosRBT.put(startTime,accidente);
-				datosBST.put(startTime, accidente);
+				datosRBT.put(startDate,accidente);
+				
+				//datosBST.put(startTime, accidente);
 				
 				contador ++;
 			}
@@ -191,16 +270,56 @@ public class Modelo {
 			System.out.println("Valor minimo de llave en el arbol: " + datosRBT.min());
 			System.out.println("Valor maximo de llave en el arbol: " + datosRBT.max()+ "\n");
 			// Imprimne la informacion del arbol BST
-			System.out.println("***** INFORMACION DEL BinarySearchTree (BST) *****");
-			System.out.println("El numero total de llaves ingresadas en el arbol fueron: " + (((LinkedList<String>) datosBST.keySet()).size()));
-			System.out.println("La altura del arbol es: " + datosBST.height());
-			System.out.println("Valor minimo de llave en el arbol: " + datosBST.min());
-			System.out.println("Valor maximo de llave en el arbol: " + datosBST.max() + "\n");
+//			System.out.println("***** INFORMACION DEL BinarySearchTree (BST) *****");
+//			System.out.println("El numero total de llaves ingresadas en el arbol fueron: " + (((LinkedList<String>) datosBST.keySet()).size()));
+//			System.out.println("La altura del arbol es: " + datosBST.height());
+//			System.out.println("Valor minimo de llave en el arbol: " + datosBST.min());
+//			System.out.println("Valor maximo de llave en el arbol: " + datosBST.max() + "\n");
 
 
 		} catch (Exception e)
 		{
 			System.out.println("Error al cargar los datos: " + e.getMessage());
 		}
+		
+	}
+	
+	
+	/**
+	 * 
+	 */
+	public boolean correctFormat(String fechaInit, String fechaEnd) {
+		
+		if(fechaInit == null) {
+			fechaInit = datosRBT.min();
+		}
+		
+		// verifica formato y la entrada de datos.
+		if((fechaInit=="" || fechaEnd=="")){
+			System.out.println("ninguna de las fechas debe ser vacia");
+			return false;
+		}
+		
+		if(fechaInit.compareTo(fechaEnd)>0) {
+			System.out.println("la fecha inferior no debe ser mayor a la superior");
+		}
+		
+		String[] split = fechaInit.split("-");
+		String[] split2 = fechaEnd.split("-");
+		
+		if(split.length != 3 || split2.length !=3 || Integer.parseInt(split[0])<2016 ||
+				Integer.parseInt(split[0])>2019 || Integer.parseInt(split[1])<=0 || 
+				Integer.parseInt(split[1])>12 || Integer.parseInt(split[2])<=0 || 
+				Integer.parseInt(split[2])>31 || Integer.parseInt(split2[0])<2016 ||
+				Integer.parseInt(split2[0])>2019 || Integer.parseInt(split2[1])<=0 ||
+				Integer.parseInt(split2[1])>12 || Integer.parseInt(split2[2])<0 ||
+				Integer.parseInt(split2[2])>31) {
+			System.out.println("formato incorrecto");
+			return false;
+
+		}
+		else
+			return true;
+		
 	}
 }
