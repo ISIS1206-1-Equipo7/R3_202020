@@ -129,6 +129,21 @@ public class Controller {
 					break;
 				}
 				break;
+				
+			case 6:
+				if(!cargados) {
+					view.printMessage("Debe cargar los datos primero");
+					break;
+				}
+				view.printMessage("dar latitud centro");
+				double latitude = Double.parseDouble(lector.next());
+				view.printMessage("dar longitud centro");
+				double longitude = Double.parseDouble(lector.next());
+				view.printMessage("dar el radio (en Km)");
+				double radius = Double.parseDouble(lector.next());
+				
+				modelo.conocerAccidentesZona(latitude, longitude, radius);
+				break;
 
 			default: 
 				view.printMessage("--------- \n Opcion Invalida !! \n---------");

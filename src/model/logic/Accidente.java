@@ -1,8 +1,14 @@
 package model.logic;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Accidente  {
 	
+	
+	//---------------
+	//ATRIBUTOS:
+	//---------------
 	/**
 	 * Atributo id
 	 */
@@ -34,16 +40,33 @@ public class Accidente  {
 	private String endHour;
 	
 	/**
+	 * Atributo de latitud inicial
+	 */
+	private String latitude;
+	
+	/**
+	 * Atributo de longitud inicial
+	 */
+	private String longitude;
+	
+	
+	/**
 	 * Constructor
 	 */
-	public Accidente (String id, String severity, String startDate, String endDate, String startHour, String endHour) {
+	public Accidente (String id, String severity, String startDate, String endDate, String startHour, String endHour, String latitude, String longitude) {
 		this.id = id;
 		this.severity = severity;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.startHour = startHour;
 		this.endHour = endHour;
+		this.latitude = latitude;
+		this.longitude = longitude;
 	}
+	
+	//---------------
+	//METODOS:
+	//---------------
 	
 	/**
 	 * Retorna el atributo id
@@ -87,6 +110,43 @@ public class Accidente  {
 	public String getEndHour() {
 		return endHour;
 	}
+	
+	/**
+	 * retorna el atributo Latitude como DOUBLE.
+	 */
+	public double getLat() {
+		return Double.parseDouble(latitude);
+	}
+	
+	/**
+	 * retorna el atributo Longitude como DOUBLE.
+	 */
+	public double getlon() {
+		return Double.parseDouble(longitude);
+
+	}
+	
+	/**
+	 * convierte el string de la fecha en formato Date.
+	 */
+	public Date toDate() {
+		
+		String formatedDate = startDate.replace("-", "/");
+		Date fecha = null;
+		try {
+			
+			fecha =  new SimpleDateFormat("yyyy/M/dd").parse(formatedDate);
+
+		}
+		catch(Exception e) {
+			e.getMessage();
+
+		}
+		
+		return fecha;
+		
+	}
+
 
 	
 

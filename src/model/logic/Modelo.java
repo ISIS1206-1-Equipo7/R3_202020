@@ -2,6 +2,10 @@ package model.logic;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedList;
 
 import model.data_structures.BinarySearchTree;
@@ -12,18 +16,10 @@ import model.data_structures.RedBlackTree;
  *
  */
 public class Modelo {
-
-	/**
-	 * Datos
-	 */
-	private RedBlackTree <String, Accidente> datosRBT;
 	
-	private BinarySearchTree<String, Accidente> datosBST;
-
-	/**
-	 * Ruta de los datos
-	 */
-	private String ruta;
+	//-------------
+	// CONSTANTES
+	//-------------
 
 	/**
 	 * Ruta del año 2016
@@ -44,6 +40,39 @@ public class Modelo {
 	 * Ruta del año 2019
 	 */
 	private static final String ruta2019 = "data/us_accidents_dis_2019.csv";
+	
+	
+	//-------------
+	// ATRIBUTOS
+	//-------------
+
+	/**
+	 * Estructura de datos balanceada
+	 */
+	private RedBlackTree <String, Accidente> datosRBT;
+	
+	/**
+	 * estructura clasica del arbol binario de busqueda
+	 */
+	private BinarySearchTree<String, Accidente> datosBST;
+
+	/**
+	 * Ruta de los datos
+	 */
+	private String ruta;
+	
+	/**
+	 * llave minima guardada en la estructura
+	 */
+	private String minKey;
+	
+	
+	/**
+	 * llave maxima guardada en la estructura
+	 */
+	private String maxKey;
+
+
 
 	/**
 	 * Constructor del modelo del mundo con capacidad predefinida
@@ -51,7 +80,7 @@ public class Modelo {
 	public Modelo()
 	{
 		datosRBT = new RedBlackTree<String, Accidente>();
-		// datosBST = new BinarySearchTree<String, Accidente>();
+//		datosBST = new BinarySearchTree<String, Accidente>();
 	}
 
 
@@ -248,15 +277,20 @@ public class Modelo {
 				String endDate = camposDatos[5].substring(0, 10);
 				// endHour
 				String endHour = camposDatos[5].substring(11, 16);
+				// startLatitude
+				String latitude = camposDatos[6];
+				//startLongitude
+				String longitude = camposDatos[7];
 								
 				
-				Accidente accidente = new Accidente(id, severity, startDate, endDate, startHour, endHour);
+				Accidente accidente = new Accidente(id, severity, startDate, endDate, startHour, endHour, latitude, longitude);
 
 				datosRBT.put(startDate,accidente);
 				
 				//datosBST.put(startTime, accidente);
 				
 				contador ++;
+				
 			}
 
 			// Cierra el lector
@@ -267,15 +301,20 @@ public class Modelo {
 			System.out.println("***** INFORMACION DE LA LECTURA DE DATOS (RBT) *****");
 			System.out.println("El numero total de llaves ingresadas en el arbol fueron: " + (((LinkedList<String>) datosRBT.keySet()).size()));
 			System.out.println("La altura del arbol es: " + datosRBT.height());
-			System.out.println("Valor minimo de llave en el arbol: " + datosRBT.min());
-			System.out.println("Valor maximo de llave en el arbol: " + datosRBT.max()+ "\n");
+			// guarda la key minima en el atributo
+			minKey = datosRBT.min();
+			System.out.println("Valor minimo de llave en el arbol: " + minKey);
+			//guarda la key maxima en el atributo
+			maxKey = datosRBT.max();
+			System.out.println("Valor maximo de llave en el arbol: " + maxKey+ "\n");
 			// Imprimne la informacion del arbol BST
 //			System.out.println("***** INFORMACION DEL BinarySearchTree (BST) *****");
 //			System.out.println("El numero total de llaves ingresadas en el arbol fueron: " + (((LinkedList<String>) datosBST.keySet()).size()));
 //			System.out.println("La altura del arbol es: " + datosBST.height());
 //			System.out.println("Valor minimo de llave en el arbol: " + datosBST.min());
 //			System.out.println("Valor maximo de llave en el arbol: " + datosBST.max() + "\n");
-
+			
+		
 
 		} catch (Exception e)
 		{
@@ -322,4 +361,80 @@ public class Modelo {
 			return true;
 		
 	}
+	/**
+	 * Resuelve el primer bono: Conocer la zona geografica mas accidentada
+	 * utilizamos una formula llamada Haversine para calcular distancias esfericas.
+	 * @param lat
+	 * @param log
+	 * @param radius
+	 */
+	public void conocerAccidentesZona(double lat, double lon, double radius ) {
+		
+		double p = Math.PI/180;
+		LinkedList<Accidente> accidentes = (LinkedList<Accidente>) datosRBT.valuesInRange(minKey, maxKey);
+		
+		int domingo = 0;int lunes = 0;int martes = 0;int miercoles =0;
+		int jueves =0;int viernes =0;int sabado =0;
+		Calendar c = Calendar.getInstance();
+		double lat2=0.0;
+		double lon2=0.0;
+		for(Accidente acci : accidentes) {
+			
+			 // latitud y longitud del accidente a comparar.
+			 lat2 = acci.getLat();
+			 lon2 = acci.getlon();
+			
+			// p = pi/180
+		    //a = 0.5 - cos((lat2-lat1)*p)/2 + cos(lat1*p) * cos(lat2*p) * (1-cos((lon2-lon1)*p))/2
+		    //	    return 12742 * asin(sqrt(a)) #2*R*asin...
+			 
+			// formula de Haversine:
+			double a = 0.5 - Math.cos((lat2-lat)*p)/2 + Math.cos(lat*p) * Math.cos(lat2*p) * (1- Math.cos(((lon2-lon)*p)))/2;
+			double radii = 12742 * a * Math.sin(Math.sqrt(a)); //respuesta en Kilometros.
+			
+			
+			if(radii <= radius) {
+				c.setTime(acci.toDate());
+				int dia = c.get(Calendar.DAY_OF_WEEK);
+				if(dia==1) {
+					domingo++;
+				}
+				if(dia==2) {
+					lunes ++;
+				}
+				if(dia==3) {
+					martes++;
+				}
+				if(dia==4) {
+					miercoles ++;
+				}
+				if(dia==5) {
+					jueves++;
+				}
+				if(dia==6) {
+					viernes ++;
+				}
+				if(dia==7) {
+					sabado++;
+				}
+			}
+			
+		}
+		
+		int total = domingo + lunes + martes + miercoles + jueves + viernes + sabado;
+		System.out.println();
+		System.out.println("El total de accidentes ocurridos en el radio especificado es de: " + total);
+		System.out.println("Accidentes por dia de la semana:"+ "\n");
+		System.out.println("-Lunes: " + lunes);
+		System.out.println("-Martes: " + martes);
+		System.out.println("-Miercoles: " + miercoles);
+		System.out.println("-Jueves: " + jueves);
+		System.out.println("-Viernes: " + viernes);
+		System.out.println("-Sabado: " + sabado);
+		System.out.println("-Domingo: " + domingo);
+
+	}
+	
+	
+	
 }

@@ -23,6 +23,8 @@ public class View
 			System.out.println("3. Conocer los accidentes en un rango de fechas.");
 			System.out.println("4. Conocer el estado con mas accidentes.");
 			System.out.println("5. Conocer los accidentes por rango de horas.");
+			System.out.println("6. Conocer la zona geografica mas accidentada");
+
 		}
 
 		/**
