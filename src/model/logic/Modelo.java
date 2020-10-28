@@ -10,6 +10,7 @@ import java.util.LinkedList;
 
 import model.data_structures.BinarySearchTree;
 import model.data_structures.RedBlackTree;
+import model.data_structures.TablaHashSeparateChaining;
 
 /**
  * Definicion del modelo del mundo
@@ -222,11 +223,18 @@ public class Modelo {
 
 		}
 		else
-			System.out.println("La categoria de accidentes mas reportada es " + indicador2 + " con " + max2 + " accidentes.");
-
+			System.out.println("La categoria de accidentes mas reportada es " + indicador2 + " con " + max2 + " accidentes.");		
+	}
+	
+	public void estadoConMasAccidentes (String fechaInicial, String fechaFinal)
+	{
+		//datosRBT.keysInRange(fechaInicial, fechaFinal);
+		TablaHashSeparateChaining<String, String> tablaEstados = new TablaHashSeparateChaining<String,String>();
+		LinkedList<Accidente> result = (LinkedList<Accidente>) datosRBT.valuesInRange(fechaInicial, fechaFinal);
 		
-
-		
+		for (Accidente accidente : result) {
+			System.out.println(accidente.getStartHour());
+		}
 	}
 	
 	/**
@@ -281,10 +289,11 @@ public class Modelo {
 				String latitude = camposDatos[6];
 				//startLongitude
 				String longitude = camposDatos[7];
+				//state
+				String state = camposDatos[17];
 								
 				
-				Accidente accidente = new Accidente(id, severity, startDate, endDate, startHour, endHour, latitude, longitude);
-
+				Accidente accidente = new Accidente(id, severity, startDate, endDate, startHour, endHour, latitude, longitude, state);
 				datosRBT.put(startDate,accidente);
 				
 				//datosBST.put(startTime, accidente);

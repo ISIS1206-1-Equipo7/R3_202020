@@ -49,11 +49,15 @@ public class Accidente  {
 	 */
 	private String longitude;
 	
+	/**
+	 * Atributo de estado
+	 */
+	private String state;
 	
 	/**
 	 * Constructor
 	 */
-	public Accidente (String id, String severity, String startDate, String endDate, String startHour, String endHour, String latitude, String longitude) {
+	public Accidente (String id, String severity, String startDate, String endDate, String startHour, String endHour, String latitude, String longitude, String state) {
 		this.id = id;
 		this.severity = severity;
 		this.startDate = startDate;
@@ -62,11 +66,12 @@ public class Accidente  {
 		this.endHour = endHour;
 		this.latitude = latitude;
 		this.longitude = longitude;
+		this.state = state;
 	}
 	
 	//---------------
 	//METODOS:
-	//---------------
+	//--------------
 	
 	/**
 	 * Retorna el atributo id
@@ -109,6 +114,13 @@ public class Accidente  {
 	
 	public String getEndHour() {
 		return endHour;
+	}
+	
+	/**
+	 * Retorna el atributo state
+	 */
+	public String getState() {
+		return state;
 	}
 	
 	/**
