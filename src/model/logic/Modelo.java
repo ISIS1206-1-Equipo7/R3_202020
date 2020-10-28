@@ -229,11 +229,10 @@ public class Modelo {
 	public void estadoConMasAccidentes (String fechaInicial, String fechaFinal)
 	{
 		//datosRBT.keysInRange(fechaInicial, fechaFinal);
-		TablaHashSeparateChaining<String, String> tablaEstados = new TablaHashSeparateChaining<String,String>();
+		TablaHashSeparateChaining<String, Integer> tablaEstados = new TablaHashSeparateChaining<String,Integer>(); 
 		LinkedList<Accidente> result = (LinkedList<Accidente>) datosRBT.valuesInRange(fechaInicial, fechaFinal);
-		
 		for (Accidente accidente : result) {
-			System.out.println(accidente.getStartHour());
+			
 		}
 	}
 	
