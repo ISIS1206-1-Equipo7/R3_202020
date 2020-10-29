@@ -167,12 +167,29 @@ public class Modelo {
 	}
 	
 	/**
+	 * Conocer accidentes antes de una fecha
+	 * Resuelve el requerimiento 2 del Reto 3
+	 * @param fecha, fecha tope
+	 */
+	public void conocerAccidentesAnterioresFecha(String fecha) {
+		// devuelve el rango de accidentes antes de la fecha pasada por parametro
+		LinkedList<Accidente> lst = (LinkedList<Accidente>) datosRBT.valuesInRange(minKey, fecha);
+		
+		// imprime el numero de accidentes antes de la fecha pasada por parametro
+		System.out.println("Se encontraron " + lst.size() + " accidentes antes de la fecha " + fecha);
+		
+		for(Accidente accidente : lst) {
+			
+		}
+		
+	}
+	
+	/**
 	 * Conocer accidentes en un rango de fechas
 	 * Resuelve el requerimiento 3 del Reto 3.
 	 * @param fechaInit fecha inicial
 	 * @param fechaEnd fecha final.
 	 */
-	
 	public void conocerAccidentesRangoFechas(String fechaInit, String fechaEnd ) {
 		
 		LinkedList<Accidente> result = (LinkedList<Accidente>) datosRBT.valuesInRange(fechaInit, fechaEnd);
