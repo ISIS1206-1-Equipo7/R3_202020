@@ -171,17 +171,39 @@ public class Modelo {
 	 * Resuelve el requerimiento 2 del Reto 3
 	 * @param fecha, fecha tope
 	 */
-	public void conocerAccidentesAnterioresFecha(String fecha) {
+	public void conocerAccidentesAnterioresFecha(String fechaFin) {
 		// devuelve el rango de accidentes antes de la fecha pasada por parametro
-		LinkedList<Accidente> lst = (LinkedList<Accidente>) datosRBT.valuesInRange(minKey, fecha);
+		LinkedList<Accidente> accidentes = (LinkedList<Accidente>) datosRBT.valuesInRange(minKey, fechaFin);
 		
 		// imprime el numero de accidentes antes de la fecha pasada por parametro
-		System.out.println("Se encontraron " + lst.size() + " accidentes antes de la fecha " + fecha);
+		System.out.println("Se encontraron " + accidentes.size() + " accidentes antes de la fecha " + fechaFin);
 		
-		for(Accidente accidente : lst) {
-			
+		String fecha = "";
+		boolean first = true;
+		int counter = 0;
+		int max = 0;
+		String fechaMax = "";
+		
+		for(Accidente accidente : accidentes) {
+			if (first) {
+				fecha = accidente.getStartDate();
+				counter ++;
+				first = false;
+			} else {
+				if (fecha.equals(accidente.getStartDate())) {
+					counter ++;
+				} else {
+					if (counter > max) {
+						max = counter;
+						fechaMax = fecha;
+					}
+					fecha = accidente.getStartDate();
+					counter = 1;
+				}
+			}
 		}
 		
+		System.out.println("La fecha en la que mas accidentes se reportaron fue: " + fechaMax + " con un total de: " + max + " accidentes");
 	}
 	
 	/**
