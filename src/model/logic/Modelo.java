@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
+
 import model.data_structures.BinarySearchTree;
 import model.data_structures.RedBlackTree;
 import model.data_structures.TablaHashSeparateChaining;
@@ -272,7 +273,7 @@ public class Modelo {
 			System.out.println("La categoria de accidentes mas reportada es " + indicador2 + " con " + max2 + " accidentes.");		
 	}
 
-	public String estadoConMasAccidentes (String fechaInicial, String fechaFinal)
+	public void estadoConMasAccidentes (String fechaInicial, String fechaFinal)
 	{
 		//datosRBT.keysInRange(fechaInicial, fechaFinal);
 		Map<String, Integer> repeticiones = new HashMap<String, Integer>();
@@ -294,8 +295,10 @@ public class Modelo {
 		}	
 
 		if(estadoMax == null)
-			return "ERROR: no existe el estado. Revise las fechas ingresadas";
-		return estadoMax + " con " + repeticiones.get(estadoMax) + " accidentes.";
+			System.out.println("ERROR: no existe el estado. Revise las fechas ingresadas"); 
+		else
+			System.out.println("El total de accidentes reportados en ese rango es: " + result.size() + " accidentes");
+			System.out.println("El estado con mas accidentes es " + estadoMax + " con " + repeticiones.get(estadoMax) + " accidentes."); 
 	}
 
 	/**
