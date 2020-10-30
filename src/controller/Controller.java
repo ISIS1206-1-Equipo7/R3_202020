@@ -116,11 +116,11 @@ public class Controller {
 					view.printMessage("Debe cargar los datos primero");
 					break;
 				}
-				/*view.printMessage("Ingrese la fecha del limite inferior");
+				view.printMessage("Ingrese la fecha del limite inferior");
 				String fechaInit4 = lector.next();
 				view.printMessage("Ingrese la fecha del limite superior");
-				String fechaEnd4 = lector.next();*/
-				modelo.estadoConMasAccidentes("2017-01-01", "2017-01-02");
+				String fechaEnd4 = lector.next();
+				view.printMessage("El estado con mas accidentes es " + modelo.estadoConMasAccidentes(fechaInit4, fechaEnd4));
 				break;
 				
 			//Resuelve el requerimiento 5:
