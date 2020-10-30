@@ -288,6 +288,8 @@ public class Modelo {
 			//System.out.println( "Max: " + estadoMax + repeticiones.get(estadoMax) + " Otro: " +estado + repeticiones.get(estado));
 		}	
 
+		if(estadoMax == null)
+			return "ERROR: no existe el estado. Revise las fechas ingresadas";
 		return estadoMax + " con " + repeticiones.get(estadoMax) + " accidentes.";
 	}
 
