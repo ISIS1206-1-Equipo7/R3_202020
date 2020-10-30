@@ -90,6 +90,7 @@ public class Controller {
 				if(modelo.correctFormat(null, fecha)==false) {
 					break;
 				}
+				modelo.conocerAccidentesAnterioresFecha(fecha);
 				break;
 				
 			//Resuelve el requerimiento 3:

@@ -43,6 +43,11 @@ public class Modelo {
 	 * Ruta del año 2019
 	 */
 	private static final String ruta2019 = "data/us_accidents_dis_2019.csv";
+	
+	/**
+	 * Ruta de todos los annos
+	 */
+	private static final String rutaTodos = "data/US_Accidents_Dec19.csv";
 
 
 	//-------------
@@ -155,7 +160,7 @@ public class Modelo {
 			else
 				gradoCuatro++;
 		}
-
+		
 		tiempoF = System.nanoTime();
 		tiempoT = (double) (tiempoF-tiempoI)/1000000;
 
@@ -299,24 +304,30 @@ public class Modelo {
 	 * @param horaEnd
 	 */
 	public void accidentesPorRangoHoras(String horaInit, String horaEnd) {
-
+		
 	}
 
 	/**
 	 * Importa, lee y guarda los datos necesarios
 	 */
 	public void leerDatos(String anno)
-	{	
+	{			
+		long tiempoI;
+		long tiempoF;
+		double tiempoT;
+		
 		if (anno.equals("2016")) { ruta = ruta2016; }
 		if (anno.equals("2017")) { ruta = ruta2017; }
 		if (anno.equals("2018")) { ruta = ruta2018; }
 		if (anno.equals("2019")) { ruta = ruta2019; }
+		if (anno.equals("Todos")) { ruta = rutaTodos; }
 
 		String lineaDatos;
 		int contador = 0;
 
 		try
-		{	
+		{			
+			tiempoI = System.nanoTime();
 			FileReader fr = new FileReader(ruta);
 			BufferedReader br = new BufferedReader(fr);
 
@@ -357,6 +368,8 @@ public class Modelo {
 				contador ++;
 
 			}
+			tiempoF = System.nanoTime();
+			tiempoT = (double) (tiempoF-tiempoI)/1000000000;
 
 			// Cierra el lector
 			br.close();
@@ -372,6 +385,7 @@ public class Modelo {
 			//guarda la key maxima en el atributo
 			maxKey = datosRBT.max();
 			System.out.println("Valor maximo de llave en el arbol: " + maxKey+ "\n");
+			System.out.println("Tiempo es: " + tiempoT);
 			// Imprimne la informacion del arbol BST
 			//			System.out.println("***** INFORMACION DEL BinarySearchTree (BST) *****");
 			//			System.out.println("El numero total de llaves ingresadas en el arbol fueron: " + (((LinkedList<String>) datosBST.keySet()).size()));
@@ -411,12 +425,12 @@ public class Modelo {
 		String[] split = fechaInit.split("-");
 		String[] split2 = fechaEnd.split("-");
 
-		if(split.length != 3 || split2.length !=3 || Integer.parseInt(split[0])<2016 ||
-				Integer.parseInt(split[0])>2019 || Integer.parseInt(split[1])<=0 || 
+		if(split.length != 3 || split2.length !=3 || Integer.parseInt(split[0])<2015 ||
+				Integer.parseInt(split[0])>2020 || Integer.parseInt(split[1])<=0 || 
 				Integer.parseInt(split[1])>12 || Integer.parseInt(split[2])<=0 || 
-				Integer.parseInt(split[2])>31 || Integer.parseInt(split2[0])<2016 ||
-				Integer.parseInt(split2[0])>2019 || Integer.parseInt(split2[1])<=0 ||
-				Integer.parseInt(split2[1])>12 || Integer.parseInt(split2[2])<0 ||
+				Integer.parseInt(split[2])>31 || Integer.parseInt(split2[0])<2015 ||
+				Integer.parseInt(split2[0])>2020 || Integer.parseInt(split2[1])<=0 ||
+				Integer.parseInt(split2[1])>12 || Integer.parseInt(split2[2])<=0 ||
 				Integer.parseInt(split2[2])>31) {
 			System.out.println("formato incorrecto");
 			return false;
