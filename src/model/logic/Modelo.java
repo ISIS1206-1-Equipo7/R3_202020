@@ -63,7 +63,7 @@ public class Modelo {
 	/**
 	 * estructura clasica del arbol binario de busqueda
 	 */
-	private BinarySearchTree<String, Accidente> datosBST;
+	//private BinarySearchTree<String, Accidente> datosBST;
 
 	/**
 	 * Ruta de los datos
@@ -135,7 +135,7 @@ public class Modelo {
 
 	}
 
-	public void conocerAccidentesFechaBST(String fecha)
+	/*public void conocerAccidentesFechaBST(String fecha)
 	{	
 		long tiempoI;
 		long tiempoF;
@@ -277,15 +277,22 @@ public class Modelo {
 	{
 		//datosRBT.keysInRange(fechaInicial, fechaFinal);
 		Map<String, Integer> repeticiones = new HashMap<String, Integer>();
+		Map<String, Integer> repeticiones2 = new HashMap<String, Integer>();
 		LinkedList<Accidente> result = (LinkedList<Accidente>) datosRBT.valuesInRange(fechaInicial, fechaFinal);
 		for (Accidente accidente : result) {
 			Integer veces = repeticiones.get(accidente.getState());
+			Integer veces2 = repeticiones2.get(accidente.getStartDate());
 			if(veces == null)
 				veces = 0;
+			if(veces2 == null)
+				veces2 = 0;
 			repeticiones.put(accidente.getState(), veces+1);
+			repeticiones2.put(accidente.getStartDate(), veces2+1);
 		}
 
 		String estadoMax = null;
+		String fechaMax = null;
+		
 		for (String  estado : repeticiones.keySet()) {
 			if(estadoMax==null)
 				estadoMax = estado;
@@ -293,12 +300,24 @@ public class Modelo {
 				estadoMax = estado;
 			//System.out.println( "Max: " + estadoMax + repeticiones.get(estadoMax) + " Otro: " +estado + repeticiones.get(estado));
 		}	
+		
+		for (String  fecha : repeticiones2.keySet()) {
+			if(fechaMax==null)
+				fechaMax = fecha;
+			else if(repeticiones2.get(fechaMax)<repeticiones2.get(fecha))
+				fechaMax = fecha;
+			//System.out.println( "Max: " + fechaMax + repeticiones2.get(fechaMax) + " Otro: " +fecha + repeticiones2.get(fecha));
+		}	
 
 		if(estadoMax == null)
 			System.out.println("ERROR: no existe el estado. Revise las fechas ingresadas"); 
 		else
-			System.out.println("El total de accidentes reportados en ese rango es: " + result.size() + " accidentes");
+			System.out.println("La fecha con mas accidentes reportados es " + fechaMax + " con " + repeticiones2.get(fechaMax) + " accidentes.");
 			System.out.println("El estado con mas accidentes es " + estadoMax + " con " + repeticiones.get(estadoMax) + " accidentes."); 
+			
+		result = null;
+		repeticiones = null;
+		repeticiones2 = null;
 	}
 
 	/**
