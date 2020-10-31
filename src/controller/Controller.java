@@ -130,6 +130,11 @@ public class Controller {
 					view.printMessage("Debe cargar los datos primero");
 					break;
 				}
+				view.printMessage("Ingrese la hora del limite inferior");
+				String horaInit = lector.next();
+				view.printMessage("Ingrese la hora del limite superior");
+				String hotaEnd = lector.next();
+				modelo.accidentesPorRangoHoras(horaInit, hotaEnd);
 				break;
 				
 			case 6:

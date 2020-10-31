@@ -44,7 +44,7 @@ public class Modelo {
 	 * Ruta del año 2019
 	 */
 	private static final String ruta2019 = "data/us_accidents_dis_2019.csv";
-	
+
 	/**
 	 * Ruta de todos los annos
 	 */
@@ -59,6 +59,8 @@ public class Modelo {
 	 * Estructura de datos balanceada
 	 */
 	private RedBlackTree <String, Accidente> datosRBT;
+
+	private RedBlackTree <String, Accidente> accidentesHoras;
 
 	/**
 	 * estructura clasica del arbol binario de busqueda
@@ -89,6 +91,7 @@ public class Modelo {
 	public Modelo()
 	{
 		datosRBT = new RedBlackTree<String, Accidente>();
+		accidentesHoras = new RedBlackTree<String, Accidente>();
 		//		datosBST = new BinarySearchTree<String, Accidente>();
 	}
 
@@ -131,7 +134,7 @@ public class Modelo {
 		System.out.println("La cantidad de accidentes de severidad 2 es de: " + gradoDos);
 		System.out.println("La cantidad de accidentes de severidad 3 es de: " + gradoTres);
 		System.out.println("La cantidad de accidentes de severidad 4 es de: " + gradoCuatro);
-		System.out.println("El tiempo de ejecucion fue de: " + tiempoT + " milisegundos" + "\n");
+		//System.out.println("El tiempo de ejecucion fue de: " + tiempoT + " milisegundos" + "\n");
 
 	}
 
@@ -161,7 +164,7 @@ public class Modelo {
 			else
 				gradoCuatro++;
 		}
-		
+
 		tiempoF = System.nanoTime();
 		tiempoT = (double) (tiempoF-tiempoI)/1000000;
 
@@ -278,8 +281,7 @@ public class Modelo {
 		//datosRBT.keysInRange(fechaInicial, fechaFinal);
 		Map<String, Integer> repeticiones = new HashMap<String, Integer>();
 		Map<String, Integer> repeticiones2 = new HashMap<String, Integer>();
-		LinkedList<Accidente> result = (LinkedList<Accidente>) datosRBT.valuesInRange(fechaInicial, fechaFinal);
-		for (Accidente accidente : result) {
+		for (Accidente accidente : datosRBT.valuesInRange(fechaInicial, fechaFinal)) {
 			Integer veces = repeticiones.get(accidente.getState());
 			Integer veces2 = repeticiones2.get(accidente.getStartDate());
 			if(veces == null)
@@ -292,7 +294,7 @@ public class Modelo {
 
 		String estadoMax = null;
 		String fechaMax = null;
-		
+
 		for (String  estado : repeticiones.keySet()) {
 			if(estadoMax==null)
 				estadoMax = estado;
@@ -300,7 +302,7 @@ public class Modelo {
 				estadoMax = estado;
 			//System.out.println( "Max: " + estadoMax + repeticiones.get(estadoMax) + " Otro: " +estado + repeticiones.get(estado));
 		}	
-		
+
 		for (String  fecha : repeticiones2.keySet()) {
 			if(fechaMax==null)
 				fechaMax = fecha;
@@ -313,9 +315,9 @@ public class Modelo {
 			System.out.println("ERROR: no existe el estado. Revise las fechas ingresadas"); 
 		else
 			System.out.println("La fecha con mas accidentes reportados es " + fechaMax + " con " + repeticiones2.get(fechaMax) + " accidentes.");
-			System.out.println("El estado con mas accidentes es " + estadoMax + " con " + repeticiones.get(estadoMax) + " accidentes."); 
-			
-		result = null;
+		System.out.println("El estado con mas accidentes es " + estadoMax + " con " + repeticiones.get(estadoMax) + " accidentes."); 
+
+
 		repeticiones = null;
 		repeticiones2 = null;
 	}
@@ -326,8 +328,73 @@ public class Modelo {
 	 * @param horaEnd
 	 */
 	public void accidentesPorRangoHoras(String horaInit, String horaEnd) {
-		
+
+		/*for (int i = 0; i < 20; i++) {
+			String star[] = horas.get(i).getStartHour().split(":");
+			String hora = star[0];
+			String minutos = star[1];
+			int miutosN = Integer.parseInt(minutos);
+			int horaN = Integer.parseInt(hora);
+			System.out.println(horaN);
+			System.out.println(miutosN);
+			if(miutosN>30) {
+				horaN++;
+				miutosN=0;
+			}
+			else if(miutosN<30)
+				miutosN=0;
+			if(horaN<10)
+				System.out.println( "0"+Integer.toString(horaN));
+			else
+				System.out.println(Integer.toString(horaN));
+			if(miutosN!=30)
+				System.out.println(Integer.toString(miutosN)+"0");
+			else
+				System.out.println(Integer.toString(miutosN));
+		}*/
+
+		Map<String, Integer> severidad = new HashMap<String, Integer>();
+		if(accidentesHoras.isEmpty()!=false) {
+			for (Accidente accidente : datosRBT.valuesInRange(minKey, maxKey)) {
+				accidentesHoras.put(accidente.getStartHour(), accidente);
+			}
+		}
+
+		LinkedList<Accidente> result = (LinkedList<Accidente>) accidentesHoras.valuesInRange(horaInit, horaEnd);
+		for (Accidente accidente : result) {
+			Integer veces = severidad.get(accidente.getSeverity());
+			if(veces == null)
+				veces = 0;
+			severidad.put(accidente.getSeverity(), veces+1);
+		}
+
+		System.out.println(severidad.keySet());
+		System.out.println(severidad.values());
+		int s1 = 0; int s2 = 0; int s3 = 0; int s4 = 0;		
+		for (String  actual : severidad.keySet()) {
+			if(actual.equals("1"))
+				s1 = severidad.get(actual);
+			else if(actual.equals("2"))
+				s2 = severidad.get(actual);
+			else if(actual.equals("3"))
+				s3 = severidad.get(actual);
+			else
+				s4 = severidad.get(actual);
+		}
+
+		System.out.println("El total de accidentes es " + result.size());
+		System.out.println("Accidentes de severidad 1:" + s1);
+		System.out.println("Accidentes de severidad 2:" + s2);
+		System.out.println("Accidentes de severidad 3:" + s3);
+		System.out.println("Accidentes de severidad 4:" + s4);
+		System.out.println("El porcentaje de " + result.size() + " contra el total(" + datosRBT.size() +") de accidentes reportados es: " + result.size()/datosRBT.size());
+
+		severidad = null;
+		result = null;
+
 	}
+
+
 
 	/**
 	 * Importa, lee y guarda los datos necesarios
@@ -337,7 +404,7 @@ public class Modelo {
 		long tiempoI;
 		long tiempoF;
 		double tiempoT;
-		
+
 		if (anno.equals("2016")) { ruta = ruta2016; }
 		if (anno.equals("2017")) { ruta = ruta2017; }
 		if (anno.equals("2018")) { ruta = ruta2018; }
