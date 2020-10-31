@@ -107,15 +107,16 @@ public class Modelo {
 
 
 
-		int totalAccidentes = 0;
 		int gradoUno = 0;
 		int gradoDos = 0;
 		int gradoTres = 0;
 		int gradoCuatro = 0;
 
 		tiempoI = System.nanoTime();
-		for (Accidente actual : datosRBT.get(fecha)) {
-			totalAccidentes++;
+		LinkedList<Accidente> listaAcci = (LinkedList<Accidente>) datosRBT.get(fecha);
+		
+		for (Accidente actual : listaAcci) {
+
 			if(actual.getSeverity().equals("1"))
 				gradoUno++;
 			else if(actual.getSeverity().equals("2"))
@@ -129,7 +130,7 @@ public class Modelo {
 		tiempoF = System.nanoTime();
 		tiempoT = (double) (tiempoF-tiempoI)/1000000;
 
-		System.out.println("El total de accidentes ocurridos el " + fecha + " es de:" + totalAccidentes);
+		System.out.println("El total de accidentes ocurridos el " + fecha + " es de: " + listaAcci.size());
 		System.out.println("La cantidad de accidentes de severidad 1 es de: " + gradoUno);
 		System.out.println("La cantidad de accidentes de severidad 2 es de: " + gradoDos);
 		System.out.println("La cantidad de accidentes de severidad 3 es de: " + gradoTres);
@@ -361,6 +362,7 @@ public class Modelo {
 		}
 
 		LinkedList<Accidente> result = (LinkedList<Accidente>) accidentesHoras.valuesInRange(horaInit, horaEnd);
+		
 		for (Accidente accidente : result) {
 			Integer veces = severidad.get(accidente.getSeverity());
 			if(veces == null)
@@ -385,7 +387,7 @@ public class Modelo {
 		System.out.println("Accidentes de severidad 2:" + s2);
 		System.out.println("Accidentes de severidad 3:" + s3);
 		System.out.println("Accidentes de severidad 4:" + s4);
-		System.out.println("El porcentaje de " + result.size() + " contra el total(" + datosRBT.size() +") de accidentes reportados es: " + (result.size()*100)/datosRBT.size() + "%");
+		System.out.println("El porcentaje de " + result.size() + " contra el total(" + datosRBT.size() +") de accidentes reportados es: " + (result.size()/datosRBT.size())*100 + "%");
 
 		severidad = null;
 		result = null;
@@ -414,12 +416,13 @@ public class Modelo {
 
 		try
 		{			
-			tiempoI = System.nanoTime();
+			
 			FileReader fr = new FileReader(ruta);
 			BufferedReader br = new BufferedReader(fr);
 
 			// lectura de datos
 			br.readLine();
+			tiempoI = System.nanoTime();
 			while ( (lineaDatos = br.readLine()) != null )
 			{
 				String[] camposDatos = lineaDatos.split(",");
@@ -463,7 +466,7 @@ public class Modelo {
 			System.out.println();
 			System.out.println("Existen " + contador + " accidentes en el anno " + anno + "\n");
 			// Imprime la información del arbol RBT
-			System.out.println("***** INFORMACION DE LA LECTURA DE DATOS (RBT) *****");
+			System.out.println("***** INFORMACION DE LA LECTURA DE DATOS (RBT) *****"+ "\n");
 			System.out.println("El numero total de llaves ingresadas en el arbol fueron: " + (((LinkedList<String>) datosRBT.keySet()).size()));
 			System.out.println("La altura del arbol es: " + datosRBT.height());
 			// guarda la key minima en el atributo
@@ -472,7 +475,7 @@ public class Modelo {
 			//guarda la key maxima en el atributo
 			maxKey = datosRBT.max();
 			System.out.println("Valor maximo de llave en el arbol: " + maxKey+ "\n");
-			System.out.println("Tiempo es: " + tiempoT);
+			System.out.println("Tiempo de carga es de: " + tiempoT + " Segundos."+ "\n");
 			// Imprimne la informacion del arbol BST
 			//			System.out.println("***** INFORMACION DEL BinarySearchTree (BST) *****");
 			//			System.out.println("El numero total de llaves ingresadas en el arbol fueron: " + (((LinkedList<String>) datosBST.keySet()).size()));

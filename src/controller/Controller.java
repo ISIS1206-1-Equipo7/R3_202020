@@ -58,13 +58,31 @@ public class Controller {
 
 			// Importa los datos
 			case 0:
-				view.printMessage("¿De que anno desea la informacion de los accidentes?");
-				String anno = lector.next();
-				view.printMessage("Importando datos del anno " + anno + "...");
-				modelo.leerDatos(anno);
+				view.printMessage("¿De que anno desea la informacion de los accidentes? (Todos si desea cargar el conjuto completo).");
+				String periodo = lector.next();
+				view.printMessage("Importando datos para el periodo: " + periodo + "...");
+				
+				//checks format:
+				try {
+					if(Integer.parseInt(periodo)<2016 || Integer.parseInt(periodo)>2019) {
+						view.printMessage("Error: año invalido para cargar...");
+						view.printMessage("el año debe estar entre el 2016 y 2019");
+						view.printMessage("vuelva a intentarlo.");
+						break;
+					}
+				}
+				catch( Exception e) {
+					if(periodo.equalsIgnoreCase("Todos")==false) {
+						view.printMessage("Error: intentelo nuevamente, esta vez digite: Todos");
+						break;
+					}
+				}
+				
+				modelo.leerDatos(periodo);
 				view.printMessage("Datos importados correctamente.");
 				cargados = true;
 				break;
+				
 			// resuelve requerimiento 1:
 			case 1:
 				if(!cargados) {
@@ -136,7 +154,7 @@ public class Controller {
 				String hotaEnd = lector.next();
 				modelo.accidentesPorRangoHoras(horaInit, hotaEnd);
 				break;
-				
+			// resuelve el bono del requerimiento 6:
 			case 6:
 				if(!cargados) {
 					view.printMessage("Debe cargar los datos primero");
