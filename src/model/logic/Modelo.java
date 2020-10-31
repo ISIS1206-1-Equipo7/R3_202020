@@ -387,7 +387,7 @@ public class Modelo {
 		System.out.println("Accidentes de severidad 2:" + s2);
 		System.out.println("Accidentes de severidad 3:" + s3);
 		System.out.println("Accidentes de severidad 4:" + s4);
-		System.out.println("El porcentaje de " + result.size() + " contra el total(" + datosRBT.size() +") de accidentes reportados es: " + result.size()/datosRBT.size());
+		System.out.println("El porcentaje de " + result.size() + " contra el total(" + datosRBT.size() +") de accidentes reportados es: " + (result.size()*100)/datosRBT.size() + "%");
 
 		severidad = null;
 		result = null;
