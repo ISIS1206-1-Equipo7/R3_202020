@@ -368,8 +368,6 @@ public class Modelo {
 			severidad.put(accidente.getSeverity(), veces+1);
 		}
 
-		System.out.println(severidad.keySet());
-		System.out.println(severidad.values());
 		int s1 = 0; int s2 = 0; int s3 = 0; int s4 = 0;		
 		for (String  actual : severidad.keySet()) {
 			if(actual.equals("1"))
